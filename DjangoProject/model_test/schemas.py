@@ -1,8 +1,22 @@
 # schemas.py
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, ConfigDict
 from ninja import ModelSchema, Schema
 from .models import Dataset, Experiment
 from .utils import to_camel
+
+from pydantic import BaseModel, Field
+from typing import Dict, Any
+
+class CamelModel(BaseModel):
+    model_config = ConfigDict(
+        populate_by_name=True,
+        from_attributes=True,  # 替代 from_orm
+        # alias_generator=lambda s: ''.join(
+        #     word if i == 0 else word.capitalize()
+        #     for i, word in enumerate(s.split('_'))
+        # ),
+        json_schema_extra={"by_alias": True}  # ✅ 输出用别名
+    )
 
 # 🔹 嵌套的 JSON 配置结构
 class ConfigSchema(Schema):
@@ -27,23 +41,37 @@ class DatasetOut(ModelSchema):
 
 
 # 🔹 Experiment 创建请求体
-class ExperimentCreate(Schema):
+
+
+class ExperimentCreate(BaseModel):
     name: str
-    dataset_id: int
-    config: ConfigSchema
+    dataset_id: int = Field(alias='datasetId')
+    config: Dict[str, Any]
 
     class Config:
-        alias_generator = to_camel
-        allow_population_by_field_name = True
+        allow_population_by_field_name = True  # 支持通过字段名和别名传参
+        populate_by_name = True                # pydantic v2 支持
+        by_alias = True
+        alias_generator = lambda s: ''.join(
+            word if i == 0 else word.capitalize()
+            for i, word in enumerate(s.split('_'))
+        )  # 自动将 snake_case 转 camelCase
 
 
-# 🔹 Experiment 返回体（嵌套 Dataset + Config）
-class ExperimentOut(ModelSchema):
-    config: ConfigSchema
-    dataset: DatasetOut
+
+class ExperimentOut(BaseModel):
+    id: int
+    name: str
+    dataset_id: int = Field(alias='aawa')
+    config: Dict[str, Any]
 
     class Config:
-        model = Experiment
-        model_fields = ['id', 'name', 'dataset', 'config', 'created_at']
-        alias_generator = to_camel
+        orm_mode = True
         allow_population_by_field_name = True
+        populate_by_name = True                # pydantic v2 支持
+        by_alias = True
+        # alias_generator = lambda s: ''.join(
+        #     word if i == 0 else word.capitalize()
+        #     for i, word in enumerate(s.split('_'))
+        # )
+

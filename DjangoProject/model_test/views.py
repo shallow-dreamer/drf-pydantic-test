@@ -35,9 +35,10 @@ def create_experiment(request, data: ExperimentCreate):
     exp = Experiment.objects.create(
         name=data.name,
         dataset=dataset,
-        config=data.config.dict()
+        config=data.config
     )
     return exp
+
 
 
 @api.get("/experiments", response=list[ExperimentOut])
