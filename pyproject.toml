@@ -5,6 +5,23 @@ description = ""
 authors = ["转眼春夏秋冬如烟 <50688376+shallow-dreamer@users.noreply.github.com>"]
 readme = "README.md"
 
+[[tool.poetry.source]]
+name = "ali"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+priority = "primary"
+
+
+[[tool.poetry.source]]
+name = "tencent"
+url = "https://mirrors.cloud.tencent.com/pypi/simple/"
+priority = "primary"
+
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
+priority = "default"
+
 [tool.poetry.dependencies]
 python = "^3.11"
 django = "^5.2"
@@ -13,6 +30,12 @@ django-ninja = "^1.4.1"
 psycopg2 = "^2.9.10"
 drf-yasg = "^1.21.10"
 djangorestframework-camel-case = "^1.4.2"
+openai = "^1.78.1"
+jupyter = "^1.1.1"
+torch = "^2.7.0"
+matplotlib = "^3.10.3"
+scikit-learn = "^1.6.1"
+pandas = "^2.2.3"
 
 
 [build-system]
