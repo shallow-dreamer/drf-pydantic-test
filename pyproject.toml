@@ -36,6 +36,7 @@ torch = "^2.7.0"
 matplotlib = "^3.10.3"
 scikit-learn = "^1.6.1"
 pandas = "^2.2.3"
+notebook = "^7.4.2"
 
 
 [build-system]
